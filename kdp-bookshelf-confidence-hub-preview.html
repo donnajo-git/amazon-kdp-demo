@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KDP Bookshelf — Confidence Hub Preview</title>
+  <style>
+    :root {
+      --navy: #131a22;
+      --teal: #167580;
+      --orange: #ff9900;
+      --yellow: #ffd814;
+      --yellow-hover: #f7ca00;
+      --text: #16191f;
+      --muted: #5f6b75;
+      --page: #eaeded;
+      --white: #ffffff;
+      --border: #d5dbdb;
+      --soft-border: #e7e7e7;
+      --link: #007185;
+      --green: #067d62;
+      --shadow: 0 1px 2px rgba(15, 17, 17, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.35;
+    }
+
+    button, select, input { font: inherit; }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .header {
+      min-height: 132px;
+      background: var(--white);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .12);
+    }
+
+    .header-inner {
+      width: min(1380px, calc(100% - 64px));
+      margin: 0 auto;
+    }
+
+    .top-nav {
+      height: 104px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .kdp-logo {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 300px;
+      color: #7b7d80;
+    }
+
+    .kindle-wordmark {
+      color: var(--orange);
+      font-size: 33px;
+      font-weight: 400;
+      letter-spacing: -.8px;
+    }
+
+    .logo-divider {
+      width: 1px;
+      height: 72px;
+      background: #c5c8c8;
+    }
+
+    .direct-publishing {
+      font-size: 33px;
+      line-height: .86;
+      font-weight: 300;
+      letter-spacing: -.8px;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: var(--teal);
+      font-size: 19px;
+    }
+
+    .main-nav a { color: var(--teal); }
+    .main-nav .divider { color: #a4a9aa; }
+
+    .page-shell {
+      width: min(1380px, calc(100% - 64px));
+      margin: 0 auto;
+      padding: 28px 0 50px;
+    }
+
+    .page-title {
+      margin: 0 0 6px;
+      font-size: 43px;
+      font-weight: 400;
+      letter-spacing: .2px;
+    }
+
+    .page-subtitle {
+      margin: 0 0 23px;
+      font-size: 18px;
+      color: #2f3438;
+    }
+
+    .create-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 30px;
+      padding: 20px 34px;
+      margin-bottom: 16px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .updated-line {
+      margin: 0 0 14px;
+      color: #40474d;
+      font-size: 19px;
+    }
+
+    .updated-label {
+      margin-right: 13px;
+      color: #aa5944;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .create-panel p {
+      max-width: 865px;
+      margin: 0 0 14px;
+      color: #333a40;
+      font-size: 15px;
+    }
+
+    .resources {
+      color: #384149;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .resource-links {
+      display: block;
+      margin-top: 13px;
+      color: var(--teal);
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .create-button {
+      min-width: 258px;
+      min-height: 62px;
+      border: 1px solid #fcd200;
+      border-radius: 8px;
+      background: linear-gradient(#ffdf45, var(--yellow));
+      color: #20252a;
+      box-shadow: 0 1px 2px rgba(15, 17, 17, .15);
+      cursor: pointer;
+      font-size: 27px;
+      font-weight: 400;
+    }
+
+    .create-button:hover, .ad-button:hover { background: var(--yellow-hover); }
+
+    .bookshelf-toolbar {
+      display: grid;
+      grid-template-columns: 220px 1fr auto;
+      align-items: end;
+      gap: 24px;
+      margin: 17px 0 15px;
+    }
+
+    .bookshelf-toolbar h2 {
+      margin: 0;
+      font-size: 29px;
+      font-weight: 700;
+    }
+
+    .filters {
+      display: flex;
+      gap: 43px;
+      align-items: end;
+    }
+
+    .filter { display: grid; gap: 5px; }
+    .filter label { font-size: 14px; color: #50585e; }
+    .filter select {
+      min-width: 160px;
+      height: 32px;
+      padding: 3px 31px 3px 12px;
+      border: 1px solid #c9cdcf;
+      border-radius: 8px;
+      background: #fafafa;
+      color: #4d555b;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .16);
+      font-size: 14px;
+    }
+
+    .search { display: flex; gap: 8px; align-items: center; }
+    .search-box {
+      width: 214px;
+      height: 37px;
+      padding: 0 12px;
+      border: 1px solid #aeb4b8;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 15px;
+    }
+
+    .search-button {
+      height: 37px;
+      padding: 0 19px;
+      border: 0;
+      border-radius: 21px;
+      background: #26303b;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .book-row {
+      display: grid;
+      grid-template-columns: 410px 1fr;
+      min-height: 349px;
+      overflow: hidden;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .book-summary {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      align-items: center;
+      gap: 25px;
+      padding: 27px 30px;
+      border-right: 1px solid #d2d5d7;
+    }
+
+    .cover {
+      position: relative;
+      width: 132px;
+      height: 181px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 48% 37%, #f8f4d9 0 10%, transparent 10.5%),
+        conic-gradient(from 0deg at 50% 37%, #f2b44a 0 4%, #ca3c56 4% 8%, #b65f80 8% 12%, #78a0a0 12% 16%, #e07f31 16% 20%, #9960a0 20% 24%, #d43e62 24% 28%, #f2b44a 28% 32%, #5c9993 32% 36%, #d86a44 36% 40%, #8a8fc0 40% 44%, #e4ad47 44% 48%, #c74058 48% 52%, #5d9d96 52% 56%, #bd5c87 56% 60%, #ee9e3f 60% 64%, #6b9e9a 64% 68%, #bc4666 68% 72%, #d88e44 72% 76%, #776bac 76% 80%, #d54a62 80% 84%, #e9ae49 84% 88%, #6f9c9a 88% 92%, #c0496d 92% 96%, #f0ad48 96% 100%);
+      box-shadow: 1px 2px 4px rgba(0, 0, 0, .24);
+    }
+
+    .cover::before {
+      position: absolute;
+      inset: 0;
+      background: repeating-radial-gradient(circle at 48% 37%, transparent 0 12px, rgba(19, 39, 48, .33) 12px 14px, transparent 14px 24px);
+      content: "";
+    }
+
+    .cover::after {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      left: 10px;
+      color: #faf7e4;
+      content: "THE MAPLE STREET\A MYSTERY";
+      font-family: Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: pre-line;
+      text-align: center;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    .book-title {
+      margin: 0 0 13px;
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1.28;
+    }
+
+    .byline { margin: 0; font-size: 15px; color: #4c545a; }
+
+    .return-button {
+      grid-column: 1 / -1;
+      align-self: end;
+      height: 35px;
+      margin-top: 6px;
+      border: 1px solid #d5d9d9;
+      border-radius: 6px;
+      background: #fff;
+      color: #343a40;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .confidence-preview { padding: 23px 34px 17px; }
+
+    .hub-title {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin: 0;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #d7dadd;
+      font-size: 34px;
+      font-weight: 400;
+    }
+
+    .sparkle { color: var(--orange); font-size: 26px; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.15fr 1.28fr auto;
+      min-height: 102px;
+      border-bottom: 1px solid #d7dadd;
+    }
+
+    .metric {
+      min-width: 0;
+      padding: 13px 18px 11px 0;
+      margin: 14px 0;
+      border-right: 1px solid #e0e2e3;
+    }
+
+    .metric + .metric { padding-left: 23px; }
+    .metric:last-of-type { border-right: 0; }
+    .metric-label { display:block; margin-bottom:4px; font-size:14px; font-weight:700; }
+    .metric strong { display:block; font-size:18px; }
+    .metric-sub { display:block; margin-top:6px; color:#4f585f; font-size:12px; }
+
+    .mini-chart {
+      width: 104px;
+      height: 40px;
+      display: block;
+      margin-top: 5px;
+    }
+
+    /*.geo-icon {
+      position: relative;
+      width: 102px;
+      height: 42px;
+      margin-top: 3px;
+      background: #fafafa;
+      border-radius: 22px;
+    }
+
+    .geo-icon::before {
+      position: absolute;
+      top: 11px;
+      left: 11px;
+      width: 37px;
+      height: 14px;
+      border-radius: 50% 40% 40% 50%;
+      background: #ffc65b;
+      box-shadow: 37px 3px 0 -1px #f6b343, 22px 16px 0 -4px #f5c75f;
+      content: "";
+    }*/
+
+    .demo-wrap { display:flex; gap:9px; align-items:center; }
+    .donut { width:58px;height:58px;border-radius:50%;background:conic-gradient(#ffae00 0 65%,#ffe48d 65% 83%,#a3a5a6 83% 93%,#e2e4e5 93% 100%);position:relative; }
+    .donut::after { position:absolute;inset:15px;border-radius:50%;background:#fff;content:""; }
+    .demo-legend { font-size:11px; line-height:1.55; color:#4b5358; white-space:nowrap; }
+    .demo-legend i { display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:1px; }.women{background:#ffae00}.men{background:#ffe48d}.nonbinary{background:#a3a5a6}.other{background:#e2e4e5}
+    .more-insights { align-self:center; padding-left:20px; color:#8b9195; font-size:14px; white-space:nowrap; }
+
+    .preview-bottom {
+      display: grid;
+      grid-template-columns: 1fr 270px;
+      gap: 20px;
+      align-items: center;
+      padding-top: 22px;
+    }
+
+    .preview-bottom h3 { margin:0 0 4px; font-size:18px; }
+    .preview-bottom p { margin:0 0 13px; color:#3d4449; font-size:15px; }
+    .ad-button { min-width:250px;height:37px;border:1px solid #fcd200;border-radius:4px;background:var(--yellow);color:#1f252b;cursor:pointer;font-size:15px;font-weight:700; }
+
+    .insight-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 43px;
+      border: 1px solid #d5d9d9;
+      border-radius: 6px;
+      background: #fff;
+      color: #364047;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .insight-link:hover { border-color:#879399; text-decoration:none; }
+
+    .footer-pager { display:flex; justify-content:flex-end; margin-top:17px; }
+    .pager { padding:9px 18px; border:1px solid #d5d9d9; border-radius:8px; background:#f7fafa; box-shadow:var(--shadow); color:#566068; font-size:14px; }
+
+    .kdp-select-banner { min-height:74px; display:flex; align-items:center; justify-content:center; gap:65px; margin-top:36px; background:#fff; color:#4d5358; font-size:15px; }
+    .select-logo { min-width:195px; padding:17px 22px; background:#ff9900; color:#fff; font-size:29px; font-weight:300; }
+    .select-logo small { font-size:14px; }
+
+    @media (max-width: 1100px) {
+      .top-nav { gap:24px; }.kdp-logo { min-width:260px; }.kindle-wordmark,.direct-publishing{font-size:27px}.main-nav{gap:16px;font-size:16px}.book-row{grid-template-columns:330px 1fr}.book-summary{grid-template-columns:120px 1fr;gap:18px;padding:24px}.cover{width:108px;height:150px}.metrics{grid-template-columns:repeat(3,1fr)}.more-insights{display:none}.demo-wrap{margin-top:5px}
+    }
+    @media (max-width: 760px) {
+      .header-inner,.page-shell{width:min(100% - 28px,1380px)}.top-nav{height:auto;padding:22px 0;flex-wrap:wrap}.kdp-logo{min-width:0}.main-nav{width:100%;justify-content:space-between}.bookshelf-toolbar{grid-template-columns:1fr}.filters{gap:12px;flex-wrap:wrap}.search{justify-content:flex-start}.book-row{grid-template-columns:1fr}.book-summary{border-right:0;border-bottom:1px solid var(--border)}.metrics{grid-template-columns:1fr 1fr}.preview-bottom{grid-template-columns:1fr}.kdp-select-banner{display:none}.create-panel{grid-template-columns:1fr}.create-button{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="top-nav">
+        <div class="kdp-logo" aria-label="Kindle Direct Publishing">
+          <div class="kindle-wordmark">kindle</div>
+          <div class="logo-divider"></div>
+          <div class="direct-publishing">direct<br>publishing</div>
+        </div>
+        <nav class="main-nav" aria-label="KDP primary navigation">
+          <a href="#">Bookshelf</a><span class="divider">|</span>
+          <a href="#">Reports</a><span class="divider">|</span>
+          <a href="#">Community</a><span class="divider">|</span>
+          <a href="#">Marketing</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <h1 class="page-title">Create. Manage. Publish.</h1>
+    <p class="page-subtitle">Publish a new title by clicking Create. Or manage your existing titles from your books below.</p>
+
+    <section class="create-panel">
+      <div>
+        <p class="updated-line"><span class="updated-label">UPDATED</span>Create a new title or series.</p>
+        <p>Reach readers in the format they want. You can now publish an eBook, paperback, or hardcover book. If publishing a series, you can create an Amazon series page and add your books.</p>
+        <div class="resources">New to KDP? Learn more about our resources to help you get started:<span class="resource-links">Create a book &nbsp;|&nbsp; Book timelines &nbsp;|&nbsp; Free ISBNs &nbsp;|&nbsp; Tools and resources</span></div>
+      </div>
+      <button class="create-button" type="button">＋ Create</button>
+    </section>
+
+    <section class="bookshelf-toolbar">
+      <h2>Bookshelf</h2>
+      <div class="filters">
+        <div class="filter"><label for="view">View:</label><select id="view"><option>Your titles</option></select></div>
+        <div class="filter"><label for="sort">Sort by:</label><select id="sort"><option>Last Modified</option></select></div>
+        <div class="filter"><label for="filter">Filter by:</label><select id="filter"><option>All</option></select></div>
+      </div>
+      <div class="search"><input class="search-box" aria-label="Search books" placeholder="⌕  Title, status, etc."><button class="search-button">Search</button></div>
+    </section>
+
+    <section class="book-row" aria-label="Book and Confidence Hub preview">
+      <article class="book-summary">
+        <div class="cover" aria-label="Book cover for The Maple Street Mystery"></div>
+        <div>
+          <h3 class="book-title">The<br>Maple Street<br>Mystery</h3>
+          <p class="byline">By Paxton Bond</p>
+        </div>
+        <button class="return-button" type="button">Return View</button>
+      </article>
+
+      <section class="confidence-preview">
+        <h2 class="hub-title">Confidence Hub <span class="sparkle">✦</span></h2>
+
+        <div class="metrics">
+          <div class="metric"><span class="metric-label">Current Readers</span><strong>204</strong><span class="metric-label" style="margin-top:8px">Total Readers</span><strong>1,482</strong></div>
+          <div class="metric"><span class="metric-label">Reading progress</span><svg class="mini-chart" viewBox="0 0 104 40" aria-label="Small reading progress chart"><polyline points="2,8 15,31 29,22 43,26 56,29 70,8 86,12 102,15" fill="none" stroke="#ff9900" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="metric-sub">Page 68 on average</span></div>
+          <div class="metric"><span class="metric-label">Geographical</span><div class="geo-icon" aria-label="Reader activity primarily in the United States and United Kingdom"></div> <img src="geographical map.png" alt="Italian Trulli" height="50px" width="130px" margin-top="3px">
+          <span class="metric-sub">Main markets: US, UK</span></div>
+          <div class="metric"><span class="metric-label">Reader profile</span><div class="demo-wrap"><div class="donut" aria-label="Aggregated reader profile chart"></div><div class="demo-legend"><div><i class="women"></i>Women</div><div><i class="men"></i>Men</div><div><i class="nonbinary"></i>Non-Binary</div><div><i class="other"></i>Other</div></div></div></div>
+          <a class="more-insights" href="kdp-confidence-hub-complete.html" aria-label="Open Confidence Hub details">More<br>Insights &gt;</a>
+        </div>
+
+        <div class="preview-bottom">
+          <div>
+            <h3>Confidence Hub insights</h3>
+            <p>See private reader activity, reading progress, marketplace patterns, and peer context for this title.</p>
+          </div>
+          <a class="insight-link" href="kdp-confidence-hub-complete.html">More Insights &nbsp;›</a>
+        </div>
+      </section>
+    </section>
+
+    <div class="footer-pager"><div class="pager">10 Per Page &nbsp;⌄</div></div>
+  </main>
+
+  <footer class="kdp-select-banner"><div class="select-logo">kdp <small>select</small></div><div>Make more money and reach more readers through Kindle Unlimited. <a href="#">Learn More</a></div><strong>Total KDP Select Author Earnings<br><span style="font-weight:400;color:#ad7929">March 2024 · $53.9 Million</span></strong></footer>
+</body>
+</html>
